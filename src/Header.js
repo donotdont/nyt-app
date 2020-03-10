@@ -1,16 +1,21 @@
 import React, { Component, useState } from 'react';
 
+import logo from './logo.svg';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+
+import { 
+    AppBar,
+    Toolbar,
+    IconButton,
+    Typography,
+    InputBase,
+    Badge,
+    MenuItem,
+    Menu
+ } from '@material-ui/core';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -30,6 +35,9 @@ const styles = theme => ({
         [theme.breakpoints.up('sm')]: {
             display: 'block',
         },
+    },
+    logo:{
+        marginTop: 10,
     },
     search: {
         position: 'relative',
@@ -217,9 +225,7 @@ class Header extends Component {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Typography className={classes.title} variant="h6" noWrap>
-                            Material-UI
-          </Typography>
+                        <Typography className={classes.title} variant="h6" noWrap><img src={logo} className={classes.logo} alt="logo" alt="The New York Times" width="195" /></Typography>
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
                                 <SearchIcon />
@@ -280,5 +286,4 @@ Header.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-//export default Header;
 export default withStyles(styles)(Header);
