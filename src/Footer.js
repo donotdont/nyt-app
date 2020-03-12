@@ -9,12 +9,12 @@ import {
 
 const styles = theme => ({
     footer: {
-        maxWidth: 700, 
-        margin: "24px auto", 
+        maxWidth: 700,
+        margin: "24px auto",
         textAlign: "center"
     },
     divider: {
-        margin:  "24px auto",
+        margin: "24px auto",
         width: 60
     }
 });
@@ -45,22 +45,22 @@ class Footer extends Component {
                 <Grid container justify={"center"} spacing={2}>
                     <Grid item xs={12} sm={6} md={3}>
                         <Typography align={"center"} gutterBottom color={"textSecondary"}>
-                            About
+                            NEWS
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Typography align={"center"} gutterBottom color={"textSecondary"}>
-                            Blog
+                            OPINION
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Typography align={"center"} gutterBottom color={"textSecondary"}>
-                            Terms & Conditions
+                            ARTS
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Typography align={"center"} gutterBottom color={"textSecondary"}>
-                            Contact us
+                            LIVING
                         </Typography>
                     </Grid>
                 </Grid>

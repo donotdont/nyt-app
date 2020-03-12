@@ -6,6 +6,7 @@ import logo from './logo.svg';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import { fade, makeStyles } from '@material-ui/core/styles';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import {
     AppBar,
@@ -15,7 +16,9 @@ import {
     InputBase,
     Badge,
     MenuItem,
-    Menu
+    Menu,
+    TextField,
+    CircularProgress
 } from '@material-ui/core';
 
 import MenuIcon from '@material-ui/icons/Menu';
@@ -91,7 +94,24 @@ const styles = theme => ({
             display: 'none',
         },
     },
+    option: {
+        fontSize: 15,
+        '& > span': {
+            marginRight: 10,
+            fontSize: 18,
+        },
+    },
 });
+
+const countries = [
+    { code: 'AD', label: 'Andorra', phone: '376' },
+    { code: 'AE', label: 'United Arab Emirates', phone: '971' },
+    { code: 'AF', label: 'Afghanistan', phone: '93' },
+    { code: 'AG', label: 'Antigua and Barbuda', phone: '1-268' },
+    { code: 'AI', label: 'Anguilla', phone: '1-264' },
+    { code: 'AL', label: 'Albania', phone: '355' },
+    { code: 'AM', label: 'Armenia', phone: '374' },
+];
 
 class Header extends Component {
     constructor(props) {
@@ -113,6 +133,9 @@ class Header extends Component {
             open_lang: true,
 
             width: props.width,*/
+            articles: [],
+            isLoaded: false,
+            open: false
         };
 
         //this.handleScroll = this.handleScroll.bind(this);
@@ -152,9 +175,60 @@ class Header extends Component {
         });
     };
 
+    sleep(delay = 0) {
+        return new Promise(resolve => {
+            setTimeout(resolve, delay);
+        });
+    }
+
+    articleSearch = async (event) => {
+        let active = true;
+
+        this.setState({
+            isLoaded: false,
+        });
+        /*fetch("https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + global.api + "&q=" + event.target.value)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        articles: result.response.docs
+                    });
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                    });
+                }
+            )*/
+
+        const response = await fetch("https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + global.api + "&q=" + event.target.value);
+        await this.sleep(1e3); // For demo purposes.
+        const result = await response.json();
+
+        if (active) {
+            this.setState({
+                isLoaded: true,
+                articles: result.response.docs
+            });
+        }
+    }
+
     render() {
         const { classes } = this.props;
-        const { anchorEl, isMenuOpen, mobileMoreAnchorEl, isMobileMenuOpen } = this.state;
+        const {
+            anchorEl,
+            isMenuOpen,
+            mobileMoreAnchorEl,
+            isMobileMenuOpen,
+            articles,
+            open,
+        } = this.state;
+        const loading = open && articles.length === 0;
         //const [anchorEl, setAnchorEl] = useState(null);
         //const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -231,13 +305,52 @@ class Header extends Component {
                             <div className={classes.searchIcon}>
                                 <SearchIcon />
                             </div>
-                            <InputBase
-                                placeholder="Search…"
-                                classes={{
-                                    root: classes.inputRoot,
-                                    input: classes.inputInput,
+                            <Autocomplete
+                                freeSolo
+                                id="country-select-demo"
+                                style={{ width: 300 }}
+                                open={open}
+                                onOpen={() => {
+                                    this.setState({
+                                        open: true,
+                                    });
                                 }}
-                                inputProps={{ 'aria-label': 'search' }}
+                                onClose={() => {
+                                    this.setState({
+                                        open: false,
+                                    });
+                                }}
+                                options={articles}
+                                loading={loading}
+                                classes={{
+                                    option: classes.option,
+                                }}
+                                autoHighlight
+                                getOptionLabel={option => option.abstract}
+                                renderOption={option => (
+                                    <React.Fragment>
+                                            <span>{option.multimedia && option.multimedia.length > 0 && option.multimedia.find((value, index) => value.subtype == "smallSquare168") && (<img src={"https://www.nytimes.com/" + option.multimedia.find((value, index) => value.subtype == "smallSquare168").url} width="50" />)}</span>
+                                            <Link to={`/detail/${option.web_url.replace("https://www.nytimes.com/", "")}`}>{option.abstract}</Link>
+                                    </React.Fragment>
+                                )}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        variant="outlined"
+                                        fullWidth
+                                        inputProps={{
+                                            ...params.inputProps,
+                                            //autoComplete: 'disabled', // disable autocomplete and autofill
+                                            endAdornment: (
+                                                <React.Fragment>
+                                                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                                    {params.InputProps.endAdornment}
+                                                </React.Fragment>
+                                            ),
+                                        }}
+                                        onChange={this.articleSearch}
+                                    />
+                                )}
                             />
                         </div>
                         <div className={classes.grow} />
