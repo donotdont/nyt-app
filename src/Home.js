@@ -1,9 +1,10 @@
 import './Global';
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
-//import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import Loading from './Loading';
 import {
   Button,
   Card,
@@ -13,7 +14,7 @@ import {
   CardMedia,
   Typography,
   Grid,
-  IconButton 
+  IconButton
 } from '@material-ui/core';
 
 import clsx from 'clsx';
@@ -220,7 +221,7 @@ class Home extends Component {
         )}
 
         {!isLoaded && (
-          <div>Loading...</div>
+          <Loading />
         )}
 
         {isLoaded && (
@@ -233,33 +234,35 @@ class Home extends Component {
                   <Grid item xs={12} sm={6} md={4}>
                     <Typography align={"center"} gutterBottom color={"textSecondary"}>
                       <Card className={classes.root}>
-                        <CardActionArea>
-                          <CardMedia
-                            component="img"
-                            alt="Contemplative Reptile"
-                            height="140"
-                            image={item.media[0] && typeof (item.media[0]["media-metadata"]) != undefined && item.media[0]["media-metadata"].length > 0 ? item.media[0]["media-metadata"][2].url : "https://www.nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-84503d139c9bc060c754589889fa3767.png"}
-                            title="Contemplative Reptile"
-                          />
-                          <CardContent>
-                            <Typography gutterBottom variant="h5" component="h2">{item.title}</Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">{item.abstract}</Typography>
-                          </CardContent>
-                        </CardActionArea>
-                        <CardActions disableSpacing>
-                          <IconButton aria-label="add to favorites">
-                            <FavoriteIcon />
-                          </IconButton>
-                          <IconButton aria-label="share">
-                            <ShareIcon />
-                          </IconButton>
-                          <IconButton
-                            className={classes.expand}
-                            aria-label="show more"
-                          >
-                            <ExpandMoreIcon />
-                          </IconButton>
-                        </CardActions>
+                        <Link to={`/detail/${item.url.replace("https://www.nytimes.com/","")}`}>
+                          <CardActionArea>
+                            <CardMedia
+                              component="img"
+                              alt="Contemplative Reptile"
+                              height="140"
+                              image={item.media[0] && typeof (item.media[0]["media-metadata"]) != undefined && item.media[0]["media-metadata"].length > 0 ? item.media[0]["media-metadata"][2].url : "https://www.nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-84503d139c9bc060c754589889fa3767.png"}
+                              title="Contemplative Reptile"
+                            />
+                            <CardContent>
+                              <Typography gutterBottom variant="h5" component="h2">{item.title}</Typography>
+                              <Typography variant="body2" color="textSecondary" component="p">{item.abstract}</Typography>
+                            </CardContent>
+                          </CardActionArea>
+                          <CardActions disableSpacing>
+                            <IconButton aria-label="add to favorites">
+                              <FavoriteIcon />
+                            </IconButton>
+                            <IconButton aria-label="share">
+                              <ShareIcon />
+                            </IconButton>
+                            <IconButton
+                              className={classes.expand}
+                              aria-label="show more"
+                            >
+                              <ExpandMoreIcon />
+                            </IconButton>
+                          </CardActions>
+                        </Link>
                       </Card>
                     </Typography>
                   </Grid>

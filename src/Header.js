@@ -1,11 +1,13 @@
 import React, { Component, useState } from 'react';
 
+import { Link, Redirect } from 'react-router-dom';
+import style from './header.css'
 import logo from './logo.svg';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import { fade, makeStyles } from '@material-ui/core/styles';
 
-import { 
+import {
     AppBar,
     Toolbar,
     IconButton,
@@ -14,7 +16,7 @@ import {
     Badge,
     MenuItem,
     Menu
- } from '@material-ui/core';
+} from '@material-ui/core';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -31,12 +33,15 @@ const styles = theme => ({
         marginRight: theme.spacing(2),
     },
     title: {
-        display: 'none',
+        display: 'block',
+        paddingTop: 8,
+        paddingBottom: 8,
+        /*display: 'none',
         [theme.breakpoints.up('sm')]: {
             display: 'block',
-        },
+        },*/
     },
-    logo:{
+    logo: {
         marginTop: 10,
     },
     search: {
@@ -143,7 +148,7 @@ class Header extends Component {
         //setMobileMoreAnchorEl(event.currentTarget);
         this.setState({
             mobileMoreAnchorEl: event.currentTarget,
-            isMobileMenuOpen: true            
+            isMobileMenuOpen: true
         });
     };
 
@@ -217,15 +222,11 @@ class Header extends Component {
             <div className={classes.grow}>
                 <AppBar position="static">
                     <Toolbar>
-                        <IconButton
-                            edge="start"
-                            className={classes.menuButton}
-                            color="inherit"
-                            aria-label="open drawer"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography className={classes.title} variant="h6" noWrap><img src={logo} className={classes.logo} alt="logo" alt="The New York Times" width="195" /></Typography>
+                        <Typography className={classes.title} variant="h6" noWrap>
+                            <Link to={`/`}>
+                                <img src={logo} className={classes.logo} alt="logo" alt="The New York Times" width="195" />
+                            </Link>
+                        </Typography>
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
                                 <SearchIcon />
